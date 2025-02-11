@@ -174,16 +174,18 @@ char *values(LinkedList *ll)
   while (node != NULL)
   {
     char temp[20];
-    sprintf(temp, "[%d | %p]", node->val, node->next);
+    sprintf(temp, "%d", node->val);
     strcat(result, temp);
 
-    if (node->next != NULL)
+    if (node != NULL)
     {
       strcat(result, " -> ");
     }
 
     node = node->next;
   }
+
+  strcat(result, "NULL");
 
   return result;
 }
@@ -230,16 +232,23 @@ void delete(LinkedList *ll, int value)
 
 LinkedList *reverse(LinkedList *ll)
 {
-  LinkedList newLinkedList;
-  Node *node = ll->head;
+  Node *curr = ll->head;
+  Node *prev = NULL;
+  Node *next = NULL;
 
-  while (node != NULL)
+  ll->tail = curr;
+
+  while (curr != NULL)
   {
-    unshift(&newLinkedList, node->val);
-    node = node->next;
+    next = curr->next;
+    curr->next = prev;
+    prev = curr;
+    curr = next;
   }
 
-  return &newLinkedList;
+  ll->head = prev;
+
+  return ll;
 }
 
 int main()
@@ -267,8 +276,10 @@ int main()
   printf("at (%d): %d\n", index, at(&ll, index));
   erase(&ll, index);
   delete (&ll, 6);
+
   printf("values: %s\n", values(&ll));
-  printf("new list values: %s\n", values(reverse(&ll)));
+
+  printf("reverse values: %s\n", values(reverse(&ll)));
 
   return 0;
 }
