@@ -200,6 +200,7 @@ void erase(LinkedList *ll, int index)
     if (i == index)
     {
       last->next = current->next;
+      ll->size -= 1;
       break;
     }
 
@@ -210,7 +211,7 @@ void erase(LinkedList *ll, int index)
   free(current);
 }
 
-void delete(LinkedList *ll, int value)
+void removeValue(LinkedList *ll, int value)
 {
   Node *last;
   Node *current = ll->head;
@@ -220,6 +221,8 @@ void delete(LinkedList *ll, int value)
     if (current->val == value)
     {
       last->next = current->next;
+      ll->size -= 1;
+
       break;
     }
 
@@ -251,9 +254,28 @@ LinkedList *reverse(LinkedList *ll)
   return ll;
 }
 
+int valueNFromEnd(LinkedList *ll, int n)
+{
+  if (n < 0)
+    return -1;
+
+  int target = (ll->size - n);
+
+  if (target < 0)
+    return -1;
+
+  Node *node = ll->head;
+  for (int i = 0; i < target; i++)
+  {
+    node = node->next;
+  }
+
+  return node->val;
+}
+
 int main()
 {
-  LinkedList ll;
+  LinkedList ll = {NULL, NULL, 0};
   append(&ll, 3);
   append(&ll, 8);
   append(&ll, 6);
@@ -275,11 +297,12 @@ int main()
   printf("Empty: %s\n", btoa(empty(&ll)));
   printf("at (%d): %d\n", index, at(&ll, index));
   erase(&ll, index);
-  delete (&ll, 6);
+  removeValue(&ll, 6);
 
   printf("values: %s\n", values(&ll));
 
   printf("reverse values: %s\n", values(reverse(&ll)));
+  printf("value n from end: %d\n", valueNFromEnd(&ll, 1));
 
   return 0;
 }
