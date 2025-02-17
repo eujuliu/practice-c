@@ -20,7 +20,7 @@ int push(Stack *s, int value)
   if (s->size == s->capacity)
   {
     printf("Max stack capacity exceeded! Please peek a value");
-    return 0;
+    return -1;
   }
 
   s->values[s->size] = value;
